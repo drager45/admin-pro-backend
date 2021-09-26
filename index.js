@@ -18,6 +18,12 @@ const app = express();
 //que se va a ejecutar simpre para para todas las lineas que se tienen abajo
 app.use(cors());
 
+
+//Para poder leer la informacion que manden en el body de una peticion vamos
+//a necesitar importa lo siguiente, esto se debe de poner antes de 
+//la configuracion de las rutas
+app.use(express.json());
+
 //Base de datos
 dbConnection();
 
@@ -29,16 +35,11 @@ dbConnection();
 //se estara ejecutando cuando realicen la peticion 
 //pero este se dispara con 2 argumentos que son el request
 //y el response para la peticion
-app.get( '/', (req, res) => {
-    //nuestro respuesta puede regrsar un string, number o un objeto
-    //es mas comun responder un objeto.
-    //si queremos agregar el estatus de nuestra peticion para probar 
-    //los estatus podemos agregar lo siguiente res.status(400).json({
-    res.json({
-        ok: true,
-        msg: 'Hola mundo'
-    });
-} );
+
+//Para nuestro login generamos esta nueva ruta
+app.use( '/api/login', require('./routes/auth'));
+//Para la nueva configuracion de nuestras rutas vamos a utilizar un middleware
+app.use( '/api/usuarios', require('./routes/usuarios') );
 
 //para poder levantar el servidor ejecutamos lo siguiente
 //el listen nos pide dos parametros que seria el puerto y el cuerpo 
